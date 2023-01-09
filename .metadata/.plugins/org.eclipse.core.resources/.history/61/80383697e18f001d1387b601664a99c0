@@ -46,7 +46,7 @@ public class AdminController {
 		session.setAttribute("fullName", session.getAttribute("fullName"));
 		model.addAttribute("personsList",personRepo.findAll());
 		//request.setAttribute(fullName, fullName);
-		return "persons"; 
+		return "persons"; //return a view named students
 		}
 	
 	@GetMapping("/savePersonPage")
@@ -95,7 +95,7 @@ public class AdminController {
 		System.out.println("View Projects list");
 		model.addAttribute("projectsList",projectRepo.findAll());
 		session.setAttribute("projects", projectRepo.findAll());
-		return "projects"; 
+		return "projects"; //return a view named students
 		}
 	
 	@GetMapping("/saveProjectPage")
@@ -126,15 +126,16 @@ public class AdminController {
 		return "redirect:/updateProject";
 	}
 	@RequestMapping(value = "/updateProject", method = { RequestMethod.GET, RequestMethod.POST })
-	
+	//@PostMapping("/updateProject")
 	public String updateProject(Model model, @ModelAttribute("projects")Project project, HttpSession session, HttpServletRequest request) {
-	
+		//projectRepo.save(project);
 		Project pro = new Project();
 		Enumeration<String> attributes = (request.getSession().getAttributeNames());
 		while (attributes.hasMoreElements()) {
 		    String attribute = (String) attributes.nextElement();
 		    if (attribute.equalsIgnoreCase("tempId")) {
-
+//				user.setFullName(request.getSession().getAttribute(attribute).toString());
+//				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
 		    	int tempId = (int) request.getSession().getAttribute(attribute);
 		    	model.addAttribute("projects",projectRepo.findById(tempId));
 		    }

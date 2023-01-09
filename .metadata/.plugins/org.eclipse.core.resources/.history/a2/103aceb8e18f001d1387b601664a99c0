@@ -84,7 +84,7 @@ public class UserController {
 		
 		model.addAttribute("userProjectsList",userProject);
 		session.getAttribute("fullName");
-		return "userProjects"; 
+		return "userProjects"; //return a view named students
 		}
 	
 	@GetMapping("/editUserProjectPage")
@@ -155,6 +155,8 @@ public class UserController {
 		while (attributes.hasMoreElements()) {
 		    String attribute = (String) attributes.nextElement();
 		    if (attribute.equalsIgnoreCase("tempId")) {
+//				user.setFullName(request.getSession().getAttribute(attribute).toString());
+//				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
 		    	int tempId = (int) request.getSession().getAttribute(attribute);
 		    	model.addAttribute("persons",personRepo.findById(tempId));
 		    	break;

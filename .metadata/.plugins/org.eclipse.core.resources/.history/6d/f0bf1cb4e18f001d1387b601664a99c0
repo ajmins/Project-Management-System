@@ -62,7 +62,7 @@ public class UserController {
 		model.addAttribute("userProfileList",userProfile);
 		session.getAttribute("fullName");
 		session.setAttribute("firstName", firstName);
-		return "userProfile"; 
+		return "userProfile"; //return a view named students
 		}
 	
 	@GetMapping("/myProjects")
@@ -78,13 +78,13 @@ public class UserController {
 				break;
 		    }
 		   
-		    //System.out.println(attribute+" : "+request.getSession().getAttribute(attribute));
+		    System.out.println(attribute+" : "+request.getSession().getAttribute(attribute));
 		}
 		Project userProject = projectRepo.findByAssigneeName(newUser);
 		
 		model.addAttribute("userProjectsList",userProject);
 		session.getAttribute("fullName");
-		return "userProjects"; 
+		return "userProjects"; //return a view named students
 		}
 	
 	@GetMapping("/editUserProjectPage")
@@ -155,6 +155,8 @@ public class UserController {
 		while (attributes.hasMoreElements()) {
 		    String attribute = (String) attributes.nextElement();
 		    if (attribute.equalsIgnoreCase("tempId")) {
+//				user.setFullName(request.getSession().getAttribute(attribute).toString());
+//				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
 		    	int tempId = (int) request.getSession().getAttribute(attribute);
 		    	model.addAttribute("persons",personRepo.findById(tempId));
 		    	break;
