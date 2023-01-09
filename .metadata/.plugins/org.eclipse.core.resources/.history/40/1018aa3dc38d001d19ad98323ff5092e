@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> <!-- to avoid warning at th:each -->
+<head>
+<meta charset="ISO-8859-1">
+<title>Student Management System</title>
+<link rel="stylesheet" 
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+	crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar bg-info text-white justify-content-end " style="background-color: #e3f2fd;">
+  <!-- Navbar content -->
+
+   	<a th:href ="@{/loginUser}" class="btn btn-light navbar-brand">Logout</a>
+</nav>
+	<div class ="container"> <br>
+		<a th:href ="@{/saveProjectPage}" class="btn btn-info">Add Projects</a>
+		<a th:href ="@{/userHomePage}" class="btn btn-info">Back</a>
+		<br>
+		<div class = "row mt-3 pl-3"> <br>
+			<h2> My Projects</h2>
+		</div>
+		<table class ="table table-striped table-bordered mt-3 ">
+			<thead class ="table-dark">
+				<tr class="bg-info">
+					<th> Project Name </th>
+					<th> Assignee Name </th>
+					<th> Start Date </th>
+					<th> End Date </th>
+					<th colspan="2"> Action </th>
+				</tr>
+			</thead>
+			<tbody>
+			<!-- thymeleaf attribute th:each to iterate list of users -->
+				<tr th:each = "project: ${userProjectsList}"> <!-- users from listPersons(), person is the iterating variable -->
+					<td th:text = "${project.projectName}"/>  <!-- to display a model data -->
+					<td th:text = "${project.assigneeName}"/> 
+					<td th:text = "${project.startDate}"/>
+					<td th:text = "${project.endDate}"/>
+					<td><a th:href ="@{/editUserProjectPage}" class="btn btn-outline-success">Edit</a></td>
+					<!--  
+					<td><a th:href ="@{/editStudentPage/{id}(id=${student.id})}" class="btn btn-outline-success">Edit</a></td>
+					<td><a th:href ="@{/deleteStudentPage/{id}(id=${student.id})}" class="btn btn-outline-danger">Delete</a></td>
+					-->
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

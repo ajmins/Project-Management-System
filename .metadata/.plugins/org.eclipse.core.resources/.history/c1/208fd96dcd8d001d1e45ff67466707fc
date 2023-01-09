@@ -1,0 +1,168 @@
+package com.project.projectmanagement.controller;
+
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.project.projectmanagement.dao.LoginRepo;
+import com.project.projectmanagement.dao.PersonRepo;
+import com.project.projectmanagement.dao.ProjectRepo;
+import com.project.projectmanagement.dao.TaskRepo;
+import com.project.projectmanagement.entity.Login;
+import com.project.projectmanagement.entity.Person;
+import com.project.projectmanagement.entity.Project;
+
+
+
+@Controller
+//@RequestMapping("/api/")
+//@SessionAttributes("userlogins")
+public class LoginController {
+
+	@Autowired
+	private PersonRepo personRepo;
+	@Autowired
+	private LoginRepo loginRepo;
+	@Autowired
+	private ProjectRepo projectRepo;
+	@Autowired
+	private TaskRepo taskRepo;
+	
+	@GetMapping("/")
+	public String HomePage() {
+		return "index";
+	}
+	 @GetMapping("/loginUser")
+	 public String login(Model model) {
+		 Login user = new Login();
+		 model.addAttribute("userRole",user);
+		 return "login";
+	 }
+	
+	 @PostMapping("/userLogin")
+	 public String loginUser(@ModelAttribute("userRole") Login user,RedirectAttributes redirectAttributes,@ModelAttribute("passData")String userName, Model model,HttpSession session,HttpServletRequest request,HttpServletResponse response) {
+		 System.out.println(user.getUserName());
+		 System.out.println(user.getPassword());
+		 userName = user.getUserName();
+		
+		 String username = user.getUserName();
+		 session.setAttribute("username", username);
+		
+
+		System.out.println(userName);
+		
+		 Login userData = loginRepo.findByUserName(userName);
+		 System.out.println(loginRepo.findByUserName(userName));
+		 String fullName = userData.getFullName();
+//		request.setAttribute("fullName", fullName);
+//		 String fullName = userData.getFullName();
+		 session.setAttribute("fullName",fullName);
+//		 Cookie cookie = new Cookie("fullName", fullName);
+//		 response.addCookie(cookie);
+		System.out.println(fullName);
+		 if(userData.getUserType().equals("admin")) {
+			 if (user.getPassword().equals(userData.getPassword())) {
+				 System.out.println("Login success");
+				 
+				 redirectAttributes.addFlashAttribute("fa", fullName);
+				 System.out.println(userName);
+				 return "redirect:/adminHomePage";
+			}
+		 }
+		 else if (userData.getUserType().equals("normaluser")) {
+			 if (user.getPassword().equals(userData.getPassword())) {
+				 System.out.println("Login success");
+				 System.out.println(userName);
+				 redirectAttributes.addFlashAttribute("fa", fullName);
+				 session.setAttribute(" fullName",fullName);
+				 System.out.println(fullName);
+				 return "redirect:/userHomePage";
+			}
+		}
+		 else {
+			 System.out.println("Login failed");
+			return "index";
+		}
+		return userName;
+
+		 
+	 }
+		@GetMapping("/adminHomePage")
+		public String ProfilePage(@ModelAttribute("fa")String fullName, Model model, Login user, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+			
+			request.getAttribute(fullName);
+			model.addAttribute("fa",fullName);
+		//	fullName = nameString[1].toString();
+			System.out.println(fullName);
+			model.addAttribute("fullName", fullName);
+			Enumeration<String> attributes = (request.getSession().getAttributeNames());
+			String newUser = null;
+			while (attributes.hasMoreElements()) {
+			    String attribute = (String) attributes.nextElement();
+			    if (attribute.equalsIgnoreCase("fullName")) {
+					user.setFullName(request.getSession().getAttribute(attribute).toString());
+					newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+			    }
+			   
+			    System.out.println(attribute+" : "+request.getSession().getAttribute(attribute));
+			}
+			return "adminHome";
+		}
+	 
+		@GetMapping("/userHomePage")
+		public String userProfilePage(@ModelAttribute("fa")String fullName, Model model, Login user, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+			
+			request.getAttribute(fullName);
+			System.out.println("entered userHomePage");
+			model.addAttribute("fa",fullName);
+		//	fullName = nameString[1].toString();
+			System.out.println(fullName);
+			model.addAttribute("fullName", fullName);
+			Enumeration<String> attributes = (request.getSession().getAttributeNames());
+			String newUser = null;
+			while (attributes.hasMoreElements()) {
+			    String attribute = (String) attributes.nextElement();
+			    if (attribute.equalsIgnoreCase("fullName")) {
+					user.setFullName(request.getSession().getAttribute(attribute).toString());
+					newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+			    }
+			   
+			    System.out.println(attribute+" : "+request.getSession().getAttribute(attribute));
+			}
+			session.setAttribute("fullname  , fullName);
+			return "userHome";
+		}
+	 
+	 
+	//get all users
+//	@GetMapping("/persons")
+//	public List<Person> getAllPersons(){
+//		return personRepo.findAll();
+//	}
+//	//get all logins
+//	@GetMapping("/logins")
+//	public List<Login> getAllLogins(){
+//		return loginRepo.findAll();
+//		
+//	}
+//	//get all projects
+//	@GetMapping("projects")
+//	public List<Project> getAllProjects(){
+//		return projectRepo.findAll();
+//		
+//	}
+}

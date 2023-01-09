@@ -1,0 +1,38 @@
+package com.project.projectmanagement;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.project.projectmanagement.dao.LoginRepo;
+import com.project.projectmanagement.dao.PersonRepo;
+import com.project.projectmanagement.entity.Login;
+import com.project.projectmanagement.entity.Person;
+
+@SpringBootApplication
+public class ProjectManagementApplication implements CommandLineRunner {
+
+	@Autowired
+	private PersonRepo personRepo;
+	@Autowired
+	private LoginRepo loginRepo;
+	
+	public static void main(String[] args) {
+		SpringApplication.run(ProjectManagementApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		Person person1 = new Person("Javed", "Kim", "javed.b@email.com", 9874563210); //1
+		person1=personRepo.save(person1);
+		
+		Integer id = person1.getPersonId();
+		
+		
+		Login login1 = new Login(id, "javedKim", "javed@123", "Javed Kim", "normaluser");
+		loginRepo.save(login1);
+		
+	}
+
+}

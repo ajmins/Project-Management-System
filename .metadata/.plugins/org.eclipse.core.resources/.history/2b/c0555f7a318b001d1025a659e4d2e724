@@ -1,0 +1,5 @@
+package com.project.projectmanagement.dao;
+
+public interface ProjectRepo {
+
+}

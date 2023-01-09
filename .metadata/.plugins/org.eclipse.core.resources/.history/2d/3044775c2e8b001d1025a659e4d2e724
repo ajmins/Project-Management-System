@@ -1,0 +1,103 @@
+package com.project.projectmanagement.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "LOGIN")
+public class Login {
+
+	@Id // to define an identifier
+	@Column(name = "login_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer loginId;
+
+	// foreign key
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_person_id" , referencedColumnName = "person_id")
+	private Person person;
+
+	@Column(name = "person_person_id", nullable = false)
+	private Integer personId;
+
+	@Column(name = "user_name", nullable = false)
+	private String userName;
+	@Column(name = "password", nullable = false)
+	private String password;
+	@Column(name = "full_name", nullable = false)
+	private String fullName;
+	@Column(name = "user_type", nullable = false)
+	private String userType;
+
+	// getters & setters
+	public Integer getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(Integer loginId) {
+		this.loginId = loginId;
+	}
+
+	public Person getPERSONS() {
+		return person;
+	}
+
+	public void setPERSONS(Person Persons) {
+		person = Persons;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	// constructors
+	public Login() {
+
+	}
+
+	public Login(Integer personId, String userName, String password, String fullName,String userType) {
+		super();
+		this.personId = personId;
+		this.userName = userName;
+		this.password = password;
+		this.fullName = fullName;
+		this.userType = userType;
+
+	}
+
+}

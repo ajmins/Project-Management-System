@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Home Page</title>
+<link rel="stylesheet" 
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+	crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar bg-info text-white justify-content-end " style="background-color: #e3f2fd;">
+  <!-- Navbar content -->
+
+</nav>
+<div class ="container mx-auto" style="width: 51em; margin-top: 2em!important;"> <br>
+ 	<h1>Welcome to Project Management System</h1>
+ 		<div class = "row" style=" padding-left:37em!important">
+			<img th:src="@{images/img1.jpg}" alt="Media Resource" class="ml-2 mt-1" style="margin-left: -33.5rem!important; margin-top: 3.25rem!important;">
+		</div>
+ 	  <div class = "row mt-1 pl-3" style="margin-top: 5em!important; padding-left:16em!important">
+ 	     <form th:action="@{/loginUser}" >
+	        <input type="submit" class="btn btn-info btn-lg" value="Login" />
+	    </form>
+	    <form th:action="@{/registerUser}" class="pl-5">
+	        <input type="submit" class="btn btn-info btn-lg" value="Register" />
+	    </form>
+ 	  
+ 	  </div>
+
+</div>
+</body>
+</html>

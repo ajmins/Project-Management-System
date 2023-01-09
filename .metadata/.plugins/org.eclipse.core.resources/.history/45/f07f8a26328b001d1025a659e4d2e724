@@ -1,0 +1,38 @@
+package com.project.projectmanagement.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TASK")
+public class Task {
+
+	@Id // to define an identifier
+	@Column(name = "task_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer taskId;
+
+	// foreign key
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_project_id" , referencedColumnName = "project_id" ,insertable = false,updatable = false)
+	private Project project;
+
+	@Column(name = "project_project_id", nullable = false)
+	private Integer projectId;
+
+	@Column(name = "task_name", nullable = false)
+	private String taskName;
+	@Column(name = "assignee_name", nullable = false)
+	private String assigneeName;
+	@Column(name = "start_date", nullable = false)
+	private String startDate;
+	@Column(name = "end_date", nullable = false)
+	private String endDate;
+}

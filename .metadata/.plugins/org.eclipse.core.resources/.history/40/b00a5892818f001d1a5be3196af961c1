@@ -1,0 +1,205 @@
+package com.project.projectmanagement.controller;
+
+import java.util.Enumeration;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.databind.deser.std.StringArrayDeserializer;
+import com.project.projectmanagement.dao.LoginRepo;
+import com.project.projectmanagement.dao.PersonRepo;
+import com.project.projectmanagement.dao.ProjectRepo;
+import com.project.projectmanagement.dao.TaskRepo;
+import com.project.projectmanagement.entity.Login;
+import com.project.projectmanagement.entity.Person;
+import com.project.projectmanagement.entity.Project;
+import com.project.projectmanagement.entity.Task;
+
+@Controller
+public class UserController {
+
+	@Autowired
+	private PersonRepo personRepo;
+	@Autowired
+	private LoginRepo loginRepo;
+	@Autowired
+	private ProjectRepo projectRepo;
+	@Autowired
+	private TaskRepo taskRepo;
+	
+	@GetMapping("/myProfile")
+	public String listProfile(Model model, Login user, HttpSession session, HttpServletRequest request)  {
+		//String name = userlogins.getUserName();
+		Enumeration<String> attributes = (request.getSession().getAttributeNames());
+		String newUser = null;
+		while (attributes.hasMoreElements()) {
+		    String attribute = (String) attributes.nextElement();
+		    if (attribute.equalsIgnoreCase("fullName")) {
+				user.setFullName(request.getSession().getAttribute(attribute).toString());
+				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+				break;
+		    }
+		   
+		    System.out.println(attribute+" : "+request.getSession().getAttribute(attribute));
+		}
+		String parts[] = newUser.split(" ");
+		String firstName=parts[0];
+		//Project userProject = projectRepo.findByAssigneeName(newUser);
+		Person userProfile = personRepo.findByFirstName(firstName);
+		model.addAttribute("userProfileList",userProfile);
+		session.getAttribute("fullName");
+		session.setAttribute("firstName", firstName);
+		return "userProfile"; //return a view named students
+		}
+	
+	@GetMapping("/myProjects")
+	public String listProject(Model model, Login user, HttpSession session, HttpServletRequest request)  {
+		//String name = userlogins.getUserName();
+		Enumeration<String> attributes = (request.getSession().getAttributeNames());
+		String newUser = null;
+		while (attributes.hasMoreElements()) {
+		    String attribute = (String) attributes.nextElement();
+		    if (attribute.equalsIgnoreCase("fullName")) {
+				user.setFullName(request.getSession().getAttribute(attribute).toString());
+				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+				break;
+		    }
+		   
+		    System.out.println(attribute+" : "+request.getSession().getAttribute(attribute));
+		}
+		Project userProject = projectRepo.findByAssigneeName(newUser);
+		
+		model.addAttribute("userProjectsList",userProject);
+		session.getAttribute("fullName");
+		return "userProjects"; //return a view named students
+		}
+	
+	@GetMapping("/editUserProjectPage")
+	public String editUserProjectPage(Model model, Login user, HttpSession session, HttpServletRequest request) {
+		Enumeration<String> attributes = (request.getSession().getAttributeNames());
+		String newUser = null;
+		//Task task = new Task();
+		while (attributes.hasMoreElements()) {
+		    String attribute = (String) attributes.nextElement();
+		    if (attribute.equalsIgnoreCase("fullName")) {
+				user.setFullName(request.getSession().getAttribute(attribute).toString());
+				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+				break;
+		    }
+		}
+		Project userProjects = projectRepo.findByAssigneeName(newUser);//have projects of Isabel user
+		int projectID = userProjects.getProjectId();//has 2
+		Task userProjectTasks = taskRepo.findByprojectId(projectID);
+		model.addAttribute("taskList",userProjectTasks);
+		return "editUserProjectPage";
+	}
+	
+	@PostMapping("/editUserProject")
+	public String saveTask(@ModelAttribute("taskList")Task task,Login user, HttpSession session, HttpServletRequest request) { 
+		Enumeration<String> attributes = (request.getSession().getAttributeNames());
+		String newUser = null;
+		Task updateTask = new Task();
+		while (attributes.hasMoreElements()) {
+		    String attribute = (String) attributes.nextElement();
+		    if (attribute.equalsIgnoreCase("fullName")) {
+				user.setFullName(request.getSession().getAttribute(attribute).toString());
+				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+				break;
+		    }
+		}
+		Project userProjects = projectRepo.findByAssigneeName(newUser);//have projects of Isabel user
+		int projectID = userProjects.getProjectId();//has 2
+		Task userProjectTasks = taskRepo.findByprojectId(projectID);
+		//userProjectTasks.setTaskName(task.getTaskName());
+		String name = userProjectTasks.getTaskName();
+		userProjectTasks.setTaskStatus(task.getTaskStatus());
+		userProjectTasks.setTaskName(name);
+		taskRepo.save(userProjectTasks);
+		
+
+		return "redirect:/myProjects"; //redirect to home page
+		
+	}
+	@GetMapping("/editMyPage/{personId}")
+	public String editMyPage(@PathVariable("personId")int personId,HttpServletRequest request, RedirectAttributes redirectAttributes, Model model,HttpSession session) {
+		//check id found in db
+		
+		Optional<Person> tempId = personRepo.findById(personId);
+		Person person = tempId.get();
+		model.addAttribute("persons", person);
+		model.addAttribute( "id", tempId );
+		session.setAttribute("tempId", personId);
+		redirectAttributes.addFlashAttribute("id", tempId);
+		
+		return "redirect:/updateMyPage";
+	}
+	
+	@RequestMapping(value = "/updateMyPage", method = { RequestMethod.GET, RequestMethod.POST })
+	public String updateMyPage(Model model, @ModelAttribute("persons")Person person, HttpSession session, HttpServletRequest request) {
+		//projectRepo.save(project);
+		Person p1 = new Person();
+		Enumeration<String> attributes = (request.getSession().getAttributeNames());
+		while (attributes.hasMoreElements()) {
+		    String attribute = (String) attributes.nextElement();
+		    if (attribute.equalsIgnoreCase("tempId")) {
+//				user.setFullName(request.getSession().getAttribute(attribute).toString());
+//				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+		    	int tempId = (int) request.getSession().getAttribute(attribute);
+		    	model.addAttribute("persons",personRepo.findById(tempId));
+		    	break;
+		    }
+		}
+		return "updateProfile";
+	}
+	@PostMapping("/saveProfile")
+	public String  saveProject(@ModelAttribute("persons")Person person ) { 
+		personRepo.save(person);
+		return "redirect:/userHomePage"; //redirect to home page
+	}
+	@GetMapping("/editMyLoginPage/{personId}")
+	public String editMyLoginPage(@PathVariable("personId")int personId,HttpServletRequest request, RedirectAttributes redirectAttributes, Model model,HttpSession session) {
+		//check id found in db
+	//	Login login = new Login();
+		Optional<Person> tempId = personRepo.findById(personId);
+		Person person = tempId.get();
+		Login loginDetails = loginRepo.findByPersonId(personId);
+		Login login = loginDetails.get();
+		model.addAttribute("persons", person);
+		model.addAttribute( "id", tempId );
+		model.addAttribute("logins",login);
+		session.setAttribute("tempId", personId);
+		redirectAttributes.addFlashAttribute("id", tempId);
+		
+		return "redirect:/updateMyLoginPage";
+	}
+	@RequestMapping(value = "/updateMyLoginPage", method = { RequestMethod.GET, RequestMethod.POST })
+	public String updateMyLoginPage(Model model, @ModelAttribute("persons")Person person,@ModelAttribute("logins")Login login,  HttpSession session, HttpServletRequest request) {
+
+		Enumeration<String> attributes = (request.getSession().getAttributeNames());
+		while (attributes.hasMoreElements()) {
+		    String attribute = (String) attributes.nextElement();
+		    if (attribute.equalsIgnoreCase("tempId")) {
+//				user.setFullName(request.getSession().getAttribute(attribute).toString());
+//				newUser= request.getSession().getAttribute(attribute).toString(); //Isabel
+		    	int tempId = (int) request.getSession().getAttribute(attribute);
+		    	model.addAttribute("persons",personRepo.findById(tempId));
+		    	model.addAttribute("logins",loginRepo.findByPersonId(tempId));
+		    	break;
+		    }
+		}
+		return "updateLoginProfile";
+	}
+}

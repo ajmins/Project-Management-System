@@ -1,0 +1,79 @@
+package com.project.projectmanagement.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TASK")
+public class Task {
+
+	@Id // to define an identifier
+	@Column(name = "task_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer taskId;
+
+	// foreign key
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_project_id" , referencedColumnName = "project_id" ,insertable = false,updatable = false)
+	private Project project;
+
+	@Column(name = "project_project_id", nullable = false)
+	private Integer projectId;
+
+	@Column(name = "task_name", nullable = false)
+	private String taskName;
+	@Column(name = "task_status", nullable = false)
+	private String taskStatus;
+	public Integer getTaskId() {
+		return taskId;
+	}
+	public void setTaskId(Integer taskId) {
+		this.taskId = taskId;
+	}
+	public Project getProject() {
+		return project;
+	}
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	public Integer getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
+	}
+	public String getTaskName() {
+		return taskName;
+	}
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+	public String getTaskStatus() {
+		return taskStatus;
+	}
+	public void setTaskStatus(String taskStatus) {
+		this.taskStatus = taskStatus;
+	}
+	
+	//constructors
+	
+	
+	
+	public Task(Integer projectId, String taskName, String taskStatus) {
+		super();
+		this.projectId = projectId;
+		this.taskName = taskName;
+		this.taskStatus = taskStatus;
+	}
+	
+	
+	
+
+}
