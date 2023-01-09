@@ -32,8 +32,8 @@
 				</tr>
 			</thead>
 			<tbody>
-			
-				<tr th:each = "project: ${projectsList}">
+			<!-- thymeleaf attribute th:each to iterate list of users -->
+				<tr th:each = "project: ${projectsList}"> <!-- users from listPersons(), person is the iterating variable -->
 					<td th:text = "${project.projectName}"/>  
 					<td th:text = "${project.assigneeName}"/> 
 					<td th:text = "${project.startDate}"/>

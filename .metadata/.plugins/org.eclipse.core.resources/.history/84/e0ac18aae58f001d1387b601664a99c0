@@ -31,8 +31,8 @@
 				</tr>
 			</thead>
 			<tbody>
-					<tr th:each = "person: ${userProfileList}">
-					<td th:text = "${person.firstName}"/>  
+					<tr th:each = "person: ${userProfileList}"> <!-- users from listPersons(), person is the iterating variable -->
+					<td th:text = "${person.firstName}"/>  <!-- to display a model data -->
 					<td th:text = "${person.lastName}"/> 
 					<td th:text = "${person.emailID}"/>
 					<td th:text = "${person.phoneNumber}"/>

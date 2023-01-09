@@ -32,16 +32,19 @@
 				</tr>
 			</thead>
 			<tbody>
-			
-				<tr th:each = "project: ${projectsList}">
-					<td th:text = "${project.projectName}"/>  
+			<!-- thymeleaf attribute th:each to iterate list of users -->
+				<tr th:each = "project: ${projectsList}"> <!-- users from listPersons(), person is the iterating variable -->
+					<td th:text = "${project.projectName}"/>  <!-- to display a model data -->
 					<td th:text = "${project.assigneeName}"/> 
 					<td th:text = "${project.startDate}"/>
 					<td th:text = "${project.endDate}"/>
 					<td><a th:href ="@{/editAdminProjectPage/{projectId}(projectId=${project.projectId})}" class="btn btn-outline-success">Edit</a></td>
 					<td><a th:href ="@{/addTaskPage/{id}(id=${project.projectId})}" class="btn btn-outline-success">Add Task</a></td>
 					<td><a th:href ="@{/deleteProjectPage/{id}(id=${project.projectId})}" class="btn btn-outline-danger">Delete</a></td>
-			
+					<!--  
+					<td><a th:href ="@{/editStudentPage/{id}(id=${student.id})}" class="btn btn-outline-success">Edit</a></td>
+					<td><a th:href ="@{/deleteStudentPage/{id}(id=${student.id})}" class="btn btn-outline-danger">Delete</a></td>
+					-->
 				</tr>
 			</tbody>
 		</table>

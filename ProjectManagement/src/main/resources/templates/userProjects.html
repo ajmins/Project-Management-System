@@ -31,17 +31,13 @@
 				</tr>
 			</thead>
 			<tbody>
-			<!-- thymeleaf attribute th:each to iterate list of users -->
-				<tr th:each = "project: ${userProjectsList}"> <!-- users from listPersons(), person is the iterating variable -->
-					<td th:text = "${project.projectName}"/>  <!-- to display a model data -->
+				<tr th:each = "project: ${userProjectsList}"> 
+					<td th:text = "${project.projectName}"/>  
 					<td th:text = "${project.assigneeName}"/> 
 					<td th:text = "${project.startDate}"/>
 					<td th:text = "${project.endDate}"/>
 					<td><a th:href ="@{/editUserProjectPage}" class="btn btn-outline-success">Edit</a></td>
-					<!--  
-					<td><a th:href ="@{/editStudentPage/{id}(id=${student.id})}" class="btn btn-outline-success">Edit</a></td>
-					<td><a th:href ="@{/deleteStudentPage/{id}(id=${student.id})}" class="btn btn-outline-danger">Delete</a></td>
-					-->
+			
 				</tr>
 			</tbody>
 		</table>
